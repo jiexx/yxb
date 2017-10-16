@@ -19,4 +19,4 @@ io.sockets.on('connection', function(socket) {
     });
 });
 
-var routes = require("./routes.js")(app);
+var routes = require("./router.js")(app);

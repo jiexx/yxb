@@ -1,12 +1,11 @@
 http://www.wxyxb.com/keeper
-/server.wxyxb.com/keeper/spread
+/server.wxyxb.com/keeper/sign
 1.build uid, save advertising txt in /server.wxyxb.com/keeper/ad/UID
-2.build QR*(http://www.wxyxb.com/keeper/signs/UID)
-3.save http://www.wxyxb.com/UID(include QR*)
+2.build QR*(http://www.wxyxb.com/keeper/UID)
+3.save http://www.wxyxb.com/UID(include QR*), use template keeper.html
 
-refer: https://cnodejs.org/topic/515d48b96d38277306454d6a
 
-http://www.wxyxb.com/UID -> http://www.wxyxb.com/keeper/signs/UID
+http://www.wxyxb.com/UID -> http://www.wxyxb.com/keeper/UID
 socket on status
 UPDATE, update QR img
 DOING -> show doing
