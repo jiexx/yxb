@@ -1,4 +1,4 @@
-//var havename = $(¡®name¡¯).value||undefined;
+
 var socket = io.connect('http://localhost:3000'); 
 
 socket.on('UPDATE', function (data) {
