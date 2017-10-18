@@ -1,3 +1,40 @@
+var QueueLooper = {
+	loop: function() {
+		var _this = this;
+		if(_this.i == _this.count) {
+			if(_this.onFinish) {
+				_this.onFinish();
+			}
+		}
+		if(_this.i < _this.count) {
+			_this.func(_this.funcArgs, function(){
+				if(_this.onceFinish) {
+					var args = new Array(arguments.length+1);
+					args[0] = _this.funcArgs;
+					for(var i = 1; i < arguments.length; ++i) {
+						args[i+1] = (arguments[i]);
+					}
+					_this.onceFinish.apply(this, args);
+				}
+				_this.i ++;
+				_this.loop();
+			});
+		}
+	},
+	create: function(count, func, funcArgs, onFinish, onceFinish) {
+		var obj = {
+			func:func,
+			count:count,
+			i:0,
+			onFinish:onFinish,
+			onceFinish:onceFinish,
+			loop:QueueLooper.loop,
+			funcArgs:funcArgs
+		};
+		return obj;
+	}
+};
+
 var browser = require('casper').create({
 		pageSettings : {
 			loadImages : true,
@@ -68,30 +105,35 @@ browser.waitFor(function check() {
 	console.log('COMMAND: UPDATE');
 	browser.waitFor(function check() {
 		return this.evaluate(function () {
-			var a = document.querySelectorAll('a.btn.btn_send').length > 0;
-			console.log('====='+document.querySelector('a.btn.btn_send').outerHTML);
-			return a;
+			console.log('====='+document.querySelector('div.chat_item.slide-left').innerHTML);
+			return document.querySelectorAll('div.chat_item.slide-left').length > 0;
 		});
 	}, function () {
 		console.log('COMMAND: DOING');
-		var e = browser.getElementsInfo('a.chat_item.slide-left');
-		var i = 0;
-		e.forEach(function (element) {
-			browser.click('a.chat_item.slide-left:nth-child(' + i + ')');
+		var e = browser.getElementsInfo('#J_NavChatScrollBody div');
+		var ql = QueueLooper.create(e.length, function(funcArgs, onFinish){
+			browser.click('#J_NavChatScrollBody div:nth-child(' + ql.i + ')');
 			browser.waitFor(function check() {
 				return this.evaluate(function () {
-					var a = document.querySelectorAll('a.btn.btn_send').length > 0;
+					var a = document.querySelector('a.title_name').innerHTML == element.innerHTML;
 					return a;
 				});
 			}, function () {
 				browser.sendKeys('pre#editArea', browser.cli.args[1]);
 				browser.click('a.btn.btn_send');
+				browser.waitFor(function check() {
+					return this.evaluate(function () {
+						var a = document.querySelector('pre.js_message_plain').innerHTML == browser.cli.args[1];
+						return a;
+					});
+				}, onFinish);
 			});
-			i++;
-			if (i == e.length) {
-				console.log('COMMAND: DONE');
-			}
-		});
+		}, null, 
+		function(){
+			console.log('COMMAND: DONE');
+			browser.exit();
+		}, null);
+        ql.loop();
 	});
 });
 
