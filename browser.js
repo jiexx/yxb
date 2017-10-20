@@ -24,7 +24,6 @@ var Each = {
 	forEach: function(count, func, funcArgs, onFinish, onceFinish) {
 		var obj = {
 			func:func,
-			count:count,
 			i:0,
 			onFinish:onFinish,
 			onceFinish:onceFinish,
@@ -59,6 +58,7 @@ var Recursion = {
 	forRecursion: function(when, func, funcArgs, onFinish, onceFinish) {
 		var obj = {
 			func:func,
+			count:0,
 			i:0,
 			when:when,
 			onFinish:onFinish,
@@ -94,7 +94,7 @@ browser.options.onResourceRequested = function (C, requestData, request) {
 	//	console.log('redirect Skipping JS file: ' + requestData['url']);
 	//	request.abort();
 	//} else {
-		console.log('redirect Down JS file: ' + requestData['url']);
+	//	console.log('Down file: ' + requestData['url']);
 	//}
 };
 
@@ -140,8 +140,8 @@ browser.waitFor(function check() {
 	
 	browser.waitFor(function check() {
 		return this.evaluate(function () {
-			console.log('====='+document.querySelector('i.web_wechat_tab_friends').outerHTML);
-			return document.querySelectorAll('i.web_wechat_tab_friends').length > 0;
+			console.log('====='+document.querySelector('#navContact div div div.ng-isolate-scope').outerHTML);
+			return document.querySelectorAll('#navContact div div div.ng-isolate-scope').length > 0;
 		});
 	}, function () {
 		console.log('COMMAND: DOING');
@@ -149,25 +149,43 @@ browser.waitFor(function check() {
 		var rr = Recursion.forRecursion(
 		function(){ // when
 			return browser.evaluate(function () {
-				console.log('====='+document.querySelector('#navContact div div div.ng-isolate-scope.active:parent + div').outerHTML);
-				return document.querySelectorAll('#navContact div div div.ng-isolate-scope.active:parent + div.bottom-placeholder').length == 0;
+				console.log('====='+document.querySelector('#navContact div div div.ng-isolate-scope.active + div').outerHTML);
+				return document.querySelectorAll('#navContact div div div.ng-isolate-scope.active + div.bottom-placeholder').length == 0;
 			});
 		}, 
 		function(args, next){ // func
-			browser.click('i.web_wechat_tab_friends:parent');
+			console.log('============================================web_wechat_tab_friends');
+			browser.click('i.web_wechat_tab_friends');
 			browser.waitFor(function check() {
 				return this.evaluate(function () {
 					console.log('====='+document.querySelector('i.web_wechat_tab_friends.web_wechat_tab_friends_hl').outerHTML);
 					return document.querySelectorAll('i.web_wechat_tab_friends.web_wechat_tab_friends_hl').length > 0;
 				});
 			}, function(){
+				console.log('============================================key.Down');
 				browser.page.sendEvent("keypress", browser.page.event.key.Down);
+				var _index = browser.evaluate(function () {
+						console.log('=====lengthAll    '+document.querySelectorAll('#navContact div div div.ng-isolate-scope.active').length);
+						if(document.querySelectorAll('#navContact div div div.ng-isolate-scope.active').length == 0) {
+							return 0;
+						}else {
+							var nodes = document.querySelectorAll('#navContact div div');
+							var ref = document.querySelector('#navContact div div div.ng-isolate-scope.active');
+							console.log("=====index "+nodes.indexOf( ref ));
+							return nodes.indexOf( ref );
+						}
+					});
 				browser.waitFor(function check() {
 					return this.evaluate(function () {
-						console.log('====='+document.querySelector('#navContact div div div.ng-isolate-scope.active').outerHTML);
-						return document.querySelectorAll('#navContact div div div.ng-isolate-scope.active').length > 0;
+						var nodes = document.querySelectorAll('#navContact div div');
+						var ref = document.querySelector('#navContact div div div.ng-isolate-scope.active');
+						console.log('=====nodes length    '+nodes.length+'=====ref length    '+ref.length);
+						console.log('=====    '+nodes.indexOf( ref ));
+						console.log('====='+document.querySelector('#navContact div div div.ng-isolate-scope.active h4.nickname').innerHTML);
+						return document.querySelector('#navContact div div div.ng-isolate-scope.active').length > 0 && _index != nodes.indexOf( ref );
 					});
 				}, function(){
+					console.log('============================================button');
 					browser.click('div.action_area a.button');
 					browser.waitFor(function check() {
 						return this.evaluate(function () {
@@ -175,6 +193,7 @@ browser.waitFor(function check() {
 							return document.querySelectorAll('i.web_wechat_tab_chat.web_wechat_tab_chat_hl').length > 0;
 						});
 					}, function(){
+						console.log('============================================sendKeys '+browser.cli.args[1]);
 						browser.sendKeys('pre#editArea', browser.cli.args[1]);
 						browser.waitFor(function check() {
 							return this.evaluate(function () {
