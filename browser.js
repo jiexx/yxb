@@ -155,8 +155,10 @@ browser.waitFor(function check() {
 		var rr = Recursion.forRecursion(
 		function(){ // when
 			return browser.evaluate(function () {
-				console.log('=====when '+(document.querySelectorAll('#navContact div div div.active + div.bottom-placeholder').length > 0));
-				return document.querySelectorAll('#navContact div div div.active + div.bottom-placeholder').length > 0;
+				var e = document.querySelector('#navContact div div div.active');
+				var r = (e && e.parentNode && e.parentNode.nextSibling && e.parentNode.nextSibling.isSameNode(document.querySelector('#navContact div div.bottom-placeholder')) ? true : false);
+				console.log('=====when '+r);
+				return r;
 			});
 		}, 
 		function(args, next){ // func
@@ -166,15 +168,16 @@ browser.waitFor(function check() {
 			
 			browser.waitFor(function check() {
 				return this.evaluate(function () {
-					return document.querySelectorAll('i.web_wechat_tab_friends.web_wechat_tab_friends_hl').length > 0 && document.querySelectorAll('#navContact div.ng-isolate-scope').length > 5;
+					return document.querySelectorAll('i.web_wechat_tab_friends.web_wechat_tab_friends_hl').length > 0 && document.querySelectorAll('#navContact div').length > 5;
 				});
 			}, function(){
 				console.log('============================================key.Down');
 				_prev = browser.evaluate(function () {
-					var e = null;
-					if(document.querySelector('#navContact div div div.active h4.nickname')) {
-						console.log('====active  _prev '+document.querySelector('#navContact div div div.active h4.nickname').innerHTML);
-						e = document.querySelector('#navContact div div div.active h4.nickname').innerHTML;
+					var e = {};
+					if(document.querySelector('#navContact div div div.active div div.info h4.nickname')) {
+						console.log('====active  _prev '+document.querySelector('#navContact div div div.active div div.info h4.nickname').innerHTML);
+						e.name = document.querySelector('#navContact div div div.active div div.info h4.nickname').innerHTML;
+						e.avatar = document.querySelector('#navContact div div div.active div div.avatar img').src;
 					}
 					
 					var event = document.createEvent("Events");
@@ -187,16 +190,15 @@ browser.waitFor(function check() {
 				browser.waitFor(function check() {
 					//this.capture((new Date()).getTime()+'.jpg');
 					_curr = this.evaluate(function () {
-						var e = null;
-						if(document.querySelector('#navContact div div div.active h4.nickname')) {
-							console.log('====active  _curr '+document.querySelector('#navContact div div div.active h4.nickname').innerHTML);
-							e = document.querySelector('#navContact div div div.active h4.nickname').innerHTML;
+						var e = {};
+						if(document.querySelector('#navContact div div div.active div div.info h4.nickname')) {
+							console.log('====active  _curr '+document.querySelector('#navContact div div div.active div div.info h4.nickname').innerHTML);
+							e.name = document.querySelector('#navContact div div div.active div div.info h4.nickname').innerHTML;
+							e.avatar = document.querySelector('#navContact div div div.active div div.avatar img').src;
 						}
-					
 						return e;
 					});
-					if(_prev && _curr && _prev == _curr) {
-						//console.log('====keypress  false ');
+					if(_prev && _curr && _prev.avatar == _curr.avatar) {
 						return false;
 					}else {
 						console.log('====keypress  true');
@@ -230,7 +232,16 @@ browser.waitFor(function check() {
 		}, null, 
 		function(){ // finish
 			console.log('COMMAND: DONE');
-			browser.exit();
+			browser.click('body div.main div div.panel div.header div.info h3 a');
+			browser.waitFor(function check() {
+				return this.evaluate(function () {
+					return document.querySelectorAll('#mmpop_system_menu').length > 0;
+				});
+			}, function(){
+				browser.click('#mmpop_system_menu ul li.last_child a');
+				console.log('COMMAND: DONE');
+				browser.exit();
+			});
 		}, null);
         rr.loop();
 	});
