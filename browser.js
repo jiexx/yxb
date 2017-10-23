@@ -161,68 +161,45 @@ browser.waitFor(function check() {
 		}, 
 		function(args, next){ // func
 			console.log('============================================web_wechat_tab_friends');
+			browser.sendKeys('pre#editArea', browser.page.event.key.Escape );
 			browser.click('a[ui-sref=contact]');
+			
 			browser.waitFor(function check() {
 				return this.evaluate(function () {
-					//console.log(document.querySelectorAll('#navContact div.ng-isolate-scope').length);
 					return document.querySelectorAll('i.web_wechat_tab_friends.web_wechat_tab_friends_hl').length > 0 && document.querySelectorAll('#navContact div.ng-isolate-scope').length > 5;
 				});
 			}, function(){
 				console.log('============================================key.Down');
-				if(!_prev) {
-					_prev = browser.evaluate(function () {
-						var e = null;
-						if(document.querySelector('#navContact div div div.active h4.nickname')) {
-							console.log('====active  '+document.querySelector('#navContact div div div.active h4.nickname').innerHTML);
-							e = document.querySelector('#navContact div div div.active h4.nickname').innerHTML;
-						}
-						
-						var event = document.createEvent("Events");
-						event.initEvent("keydown", true, true);
-						event.keyCode = 40;
-						document.querySelector('#navContact div').dispatchEvent(event);
-						
-						return e;
-					});
-				}else {
-					browser.evaluate(function () {
-						var event = document.createEvent("Events");
-						event.initEvent("keydown", true, true);
-						event.keyCode = 40;
-						document.querySelector('#navContact div').dispatchEvent(event);
-					});
-				}
-				//browser.page.sendEvent('keydown', browser.page.event.key.Down);
+				_prev = browser.evaluate(function () {
+					var e = null;
+					if(document.querySelector('#navContact div div div.active h4.nickname')) {
+						console.log('====active  _prev '+document.querySelector('#navContact div div div.active h4.nickname').innerHTML);
+						e = document.querySelector('#navContact div div div.active h4.nickname').innerHTML;
+					}
+					
+					var event = document.createEvent("Events");
+					event.initEvent("keydown", true, true);
+					event.keyCode = 40;
+					document.querySelector('#navContact').dispatchEvent(event);
+					
+					return e;
+				});
 				browser.waitFor(function check() {
 					//this.capture((new Date()).getTime()+'.jpg');
 					_curr = this.evaluate(function () {
 						var e = null;
 						if(document.querySelector('#navContact div div div.active h4.nickname')) {
-							//console.log('====active  '+document.querySelector('#navContact div div div.active h4.nickname').innerHTML);
+							console.log('====active  _curr '+document.querySelector('#navContact div div div.active h4.nickname').innerHTML);
 							e = document.querySelector('#navContact div div div.active h4.nickname').innerHTML;
 						}
-						
-						var event = document.createEvent("Events");
-						event.initEvent("keydown", true, true);
-						event.keyCode = 40;
-						document.querySelector('#navContact div').dispatchEvent(event);
-						
+					
 						return e;
 					});
-					if(_prev) {
-							console.log('====_prev  '+_prev);
-						}
-					if(_curr) {
-							console.log('====_curr  '+_curr);
-						}
 					if(_prev && _curr && _prev == _curr) {
 						//console.log('====keypress  false ');
-						//this.capture((new Date()).getTime()+'.jpg');
 						return false;
 					}else {
 						console.log('====keypress  true');
-						_prev = _curr;
-						//this.capture((new Date()).getTime()+'true.jpg');
 						return true;
 					}
 				}, function(){
@@ -235,6 +212,7 @@ browser.waitFor(function check() {
 					}, function(){
 						console.log('============================================sendKeys '+browser.cli.args[1]);
 						browser.sendKeys('pre#editArea', browser.cli.args[1], {keepFocus: true});
+						browser.sendKeys('pre#editArea', browser.page.event.key.Escape );
 						browser.click('a.btn.btn_send');
 						browser.waitFor(function check() {
 							return this.evaluate(function () {
