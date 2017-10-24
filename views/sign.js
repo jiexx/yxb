@@ -18,11 +18,12 @@ var build = function () {
 		url : "http://127.0.0.1/keeper/sign",
 		data : {
 			ad : $("#ad").val(),
-			uid : getUrlParameter("uid");
+			thx : $("#ad").val(),
+			uid : getUrlParameter("uid")
 		},
 		dataType : "json",
 		success : function (data) {
-			$("#uid").innerHTML = "ÄãµÄÍÆ¹ãµØÖ·£º" + "http://www.wxyxb.com/"+data.uid;
+			$("#uid").innerHTML = "ä½ çš„æ¨å¹¿åœ°å€ï¼š" + "http://www.wxyxb.com/"+data.uid;
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
 		}

@@ -1,9 +1,9 @@
-var socketCrawler = function(socket){
+var socketCrawler = function(socket, uid, ad){
     socket: socket,
     _open: function(socket){
         var spawn = require('child_process').spawn;
 
-        var cspr = spawn('casperjs',['browser.js']);
+        var cspr = spawn('casperjs',['browser.js', uid, ad]);
         cspr.stdout.setEncoding('utf8');
         cspr.stdout.on('data', function(data){
             var msg = JSON.parse(data);
@@ -17,11 +17,11 @@ var socketCrawler = function(socket){
 
         cspr.on('exit', function(code){
             console.log('child process exited with code'+code);
-            process.exit(code);
+            //process.exit(code);
         });
     }
-    open: function(){
-        this._open(this.socket);
+    open: function(uid, ad){
+        this._open(this.socket, uid, ad);
     }
 }
 

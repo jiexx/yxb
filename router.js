@@ -7,15 +7,16 @@ var appRouter = function(app) {
 	app.get("/", function(req, res){
 		//res.sendFile(path.join(__dirname, './', 'sign.html'));
 		var path = url.parse(req.url).pathname.substr(1);
+		console.log(path);
 		if(/^[0-9a-z]$/i.test(path)) {
-			res.redirect('.keeper/'+path);
+			res.redirect('./keeper/'+path);
 		}else {
-			res.redirect('')
+			
+			res.sendFile(__dirname+'/views/'+path);
 		}
 	});
     app.get("/keeper", function(req, res){
-		//res.sendFile(path.join(__dirname, './', 'sign.html'));
-		res.redirect('./sign.html?uid=123456')
+		res.render('./sign.html', {uid: 123456});
 	});
 	app.post("/keeper/sign", function(req, res){
 		//1.build uid, save advertising txt in /server.wxyxb.com/keeper/ad/req.body.adv
@@ -25,7 +26,7 @@ var appRouter = function(app) {
 			res.send('{err:400}');
 		}else {
 			var tmpl = fs.readFileSync('keeper.html','utf-8');
-			var keeper = ejs.render(tmpl, {uid: req.body.uid});
+			var keeper = ejs.render(tmpl, {uid: req.body.uid, ad: req.body.ad, thx: req.body.thx });
 			var qr_svg = qr.image('http://www.wxyxb.com/keeper/'+req.body.uid, {type:'svg'});
 			qr_svg.pipe(fs.createWriteStream('./qr/'+req.body.uid+'.svg'));
 			fs.appendFile('./keeper/'+req.body.uid, keeper, function (err) {

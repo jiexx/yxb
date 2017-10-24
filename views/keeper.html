@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>微信营销宝</title>
+<link rel="SHORTCUT ICON" href="images/star.ico">
+<script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.slim.js"></script>
+<script type="text/javascript" src="bg.js"></script>
+<script type="text/javascript" src="keeper.js"></script>
+<style>
+* {
+	margin:0;
+	padding:0;
+}
+body {
+	font-size:16px;
+	font:400 16px/1.62 Georgia,"Xin Gothic","Hiragino Sans GB","Droid Sans Fallback","Microsoft YaHei",sans-serif;font-family: 'PT serif',微軟正黑體,微软雅黑,华文细黑,Microsoft Yahei,Hiragino Sans GB,sans-serif;
+	color:#D0CCCC;
+	overflow:hidden;
+	text-shadow: 0px 0px 1px rgba(24, 22, 22, 0.35);
+	background-color: #000;
+}
+</style>
+</head>
+<body>
+<div class="container">
+	<div id="keeper" data-uid="<%= uid %>" data-ad="<%= ad %>"><%= thx %></div>
+	<img id="qr" src="./qr/<%= uid %>">
+</div>
+</body>
+</html>

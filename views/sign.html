@@ -5,8 +5,8 @@
 <title>微信营销宝</title>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js"></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="sign.js"></script>
-<script type="text/javascript" src="bg.js"></script>
+<script type="text/javascript" src="./sign.js"></script>
+
 <style>
 * {
 	margin:0;
@@ -25,8 +25,10 @@ body {
 <body>
  
 <canvas height="100%" width="100%" style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 1;"  id="canvas"></canvas>
+<script type="text/javascript" src="./bg.js"></script>
 <div class="container">
-	<input id="ad" type="text" class="form-control">
+	<input id="ad" type="text" class="form-control" placeholder="微信好友推广广告词">
+	<input id="thx" type="text" class="form-control" placeholder="扫码致谢词">
 	<div onclick="build()" class="btn btn-danger">创建</div>
 	<br>
 	<div id="uid"></div> 
