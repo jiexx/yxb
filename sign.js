@@ -22,7 +22,7 @@ var build = function () {
 		},
 		dataType : "json",
 		success : function (data) {
-			$("#uid").innerHTML = "你的推广地址：" + “http://www.wxyxb.com/UID";
+			$("#uid").innerHTML = "你的推广地址：" + "http://www.wxyxb.com/"+data.uid;
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
 		}
