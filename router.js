@@ -11,7 +11,6 @@ var appRouter = function(app) {
 		if(/^[0-9a-z]$/i.test(path)) {
 			res.redirect('./keeper/'+path);
 		}else {
-			
 			res.sendFile(__dirname+'/views/'+path);
 		}
 	});
