@@ -153,14 +153,23 @@ function draw() {
 	}
 	ctx.restore();
 }
+var fps = 30;
+var begin = Date.now();
+var interval = 1000/fps;
+var delta = 0;
 
 function loop() {
 	requestAnimationFrame(loop);
-	create();
-	step();
-	clear();
-	draw();
-	tick++;
+	delta = Date.now() - begin;
+	if(delta > interval) {
+		create();
+		step();
+		clear();
+		draw();
+		tick++;
+		begin = Date.now();
+		delta = 0;
+	}
 }
 
 function onresize() {

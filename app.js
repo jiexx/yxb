@@ -14,7 +14,7 @@ app.set('views', __dirname + '/views');
 app.set('view options', {
     layout: false
 });
-app.use('/keeper', express.static(__dirname + '/keeper'));
+app.use('/keeper', express.static(__dirname + '/views'));
 app.use('/', express.static(__dirname + '/views'));
 
 var server = app.listen(3000, function(){
@@ -28,5 +28,15 @@ io.sockets.on('connection', function(socket) {
         crawler.open(data.uid, data.ad);
     });
 });
+
+if(!fs.existsSync('./qrcode')){
+	fs.mkdirSync('./qrcode');
+}
+if(!fs.existsSync('./keeper')){
+	fs.mkdirSync('./keeper');
+}
+if(!fs.existsSync('./keeper/ad')){
+	fs.mkdirSync('./keeper/ad');
+}
 
 var routes = require("./router.js")(app);

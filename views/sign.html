@@ -8,7 +8,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css -->
 <link href="./bootstrap.min.css" rel="stylesheet">
-<script type="text/javascript" src="./jquery.slim.min.js"></script>
+<script type="text/javascript" src="./jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="./popper.min.js"></script>
 <script type="text/javascript" src="./bootstrap.min.js"></script>
 <script type="text/javascript" src="./sign.js"></script>
@@ -32,7 +32,7 @@ body {
  
 <canvas height="100%" width="100%" style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 1;"  id="canvas"></canvas>
 <script type="text/javascript" src="./bg.js"></script>
-<div class="container mt-5">
+<div class="container mt-5" >
 	<h3 class="text-danger text-center mb-0">微信营销宝</h3>
 	<div class="row justify-content-center align-items-center">
 		<div class="card col-6 border-danger bg-transparent mt-5">
@@ -41,7 +41,7 @@ body {
 				<input id="thx" type="text" class="form-inline form-control mb-3" placeholder="扫码致谢词">
 				<div onclick="build()" class=" form-inline form-control btn btn-danger">创建</div>
 				<br>
-				<div id="uid"></div>
+				<div id="uid" data-uid="<%= uid %>"></div>
 			</div>
 		</div>
 	</div>	
