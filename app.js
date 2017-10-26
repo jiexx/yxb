@@ -4,7 +4,8 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var app = express();
 var server = require('http').Server(app);
-var io = require('socket.io')(server);
+var ws = require('socket.io');
+var io = new ws(3001);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended:true }));
@@ -14,18 +15,21 @@ app.set('views', __dirname + '/views');
 app.set('view options', {
     layout: false
 });
-app.use('/keeper', express.static(__dirname + '/views'));
 app.use('/', express.static(__dirname + '/views'));
+app.use('/keeper', express.static(__dirname + '/views'));
+app.use('/qr', express.static(__dirname + '/qrcode'));
 
 var server = app.listen(3000, function(){
     console.log("Listening on port %s...", server.address().port);
 });
 
 io.sockets.on('connection', function(socket) {
+	console.log('NEW');
 	socket.emit('NEW', { hello: 'world' });
     socket.on('OPEN', function (data) {
+		console.log('OPEN');
         var crawler = require("./crawler.js")(socket);
-        crawler.open(data.uid, data.ad);
+        crawler.open();
     });
 });
 

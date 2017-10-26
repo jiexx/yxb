@@ -69,6 +69,7 @@ var Recursion = {
 		return obj;
 	}
 };
+var LOG = require('./log.js');
 var browser = require('casper').create({
 		pageSettings : {
 			loadImages : true,
@@ -100,7 +101,7 @@ browser.options.onResourceRequested = function (C, requestData, request) {
 };
 
 if (browser.cli.args.length != 2) {
-	console.log('Usage: browser.js <uid> <AD.>');
+	LOG.i('Usage: browser.js <uid> <AD.>');
 	browser.exit();
 }else {
 
@@ -115,17 +116,17 @@ browser.on("page.error", function (msg, backtrace) {
 });
 
 browser.on("remote.message", function (msg) {
-	this.echo("console.log: " + msg);
+	this.echo("[remote] " + msg);
 });
 
 browser.on("page.created", function () {
 	this.page.onResourceTimeout = function (request) {
-		this.echo("onResourceTimeout: " + request);
+		this.echo("[onResourceTimeout] " + request);
 	};
 });
 browser.on("resource.received", function(resource){
     if (resource.url.indexOf(".json") != -1 && resource.stage == "end") {
-        console.log(resource.url);
+        LOG.i(resource.url);
     }
 });
 var _prev = null, _curr = null;
@@ -133,7 +134,7 @@ var _prev = null, _curr = null;
 browser.start();
 
 browser.thenOpen('https://wx.qq.com');
-console.log('Open');
+LOG.i('Open');
 
 browser.waitFor(function check() {
 	return this.evaluate(function () {
@@ -141,16 +142,16 @@ browser.waitFor(function check() {
 		return document.querySelectorAll('div.qrcode').length > 0;
 	});
 }, function () {
-	console.log(browser.getElementAttribute('div.qrcode img', 'src'));
+	//console.log(browser.getElementAttribute('div.qrcode img', 'src'));
 	browser.download(browser.getElementAttribute('div.qrcode img', 'src'), 'qrcode/' + browser.cli.args[0] + '.jpg');
-	console.log('COMMAND: UPDATE');
+	LOG.json({cmd:'UPDATE', path:'qrcode/' + browser.cli.args[0] + '.jpg'});
 	
 	browser.waitFor(function check() {
 		return this.evaluate(function () {
 			return document.querySelectorAll('#navContact div div div.ng-isolate-scope').length > 0;
 		});
 	}, function () {
-		console.log('COMMAND: DOING');
+		LOG.json({cmd:'DOING'});
 		
 		var rr = Recursion.forRecursion(
 		function(){ // when
@@ -162,7 +163,7 @@ browser.waitFor(function check() {
 			});
 		}, 
 		function(args, next){ // func
-			console.log('============================================web_wechat_tab_friends');
+			LOG.i('============================================web_wechat_tab_friends');
 			browser.sendKeys('pre#editArea', browser.page.event.key.Escape );
 			browser.click('a[ui-sref=contact]');
 			
@@ -171,7 +172,7 @@ browser.waitFor(function check() {
 					return document.querySelectorAll('i.web_wechat_tab_friends.web_wechat_tab_friends_hl').length > 0 && document.querySelectorAll('#navContact div').length > 5;
 				});
 			}, function(){
-				console.log('============================================key.Down');
+				LOG.i('============================================key.Down');
 				_prev = browser.evaluate(function () {
 					var e = {};
 					if(document.querySelector('#navContact div div div.active div div.info h4.nickname')) {
@@ -201,18 +202,18 @@ browser.waitFor(function check() {
 					if(_prev && _curr && _prev.avatar == _curr.avatar) {
 						return false;
 					}else {
-						console.log('====keypress  true');
+						LOG.i('====keypress  true');
 						return true;
 					}
 				}, function(){
-					console.log('============================================button to web_wechat_tab_chat');
+					LOG.i('============================================button to web_wechat_tab_chat');
 					browser.click('div.action_area a.button');
 					browser.waitFor(function check() {
 						return this.evaluate(function () {
 							return document.querySelectorAll('i.web_wechat_tab_chat.web_wechat_tab_chat_hl').length > 0;
 						});
 					}, function(){
-						console.log('============================================sendKeys '+browser.cli.args[1]);
+						LOG.i('============================================sendKeys '+browser.cli.args[1]);
 						browser.sendKeys('pre#editArea', browser.cli.args[1], {keepFocus: true});
 						browser.sendKeys('pre#editArea', browser.page.event.key.Escape );
 						browser.click('a.btn.btn_send');
@@ -221,9 +222,9 @@ browser.waitFor(function check() {
 								return document.querySelectorAll('pre.js_message_plain').length > 0;
 							});
 						}, function(){
-							console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++');
-							console.log(' ');
-							console.log(' ');
+							LOG.i('+++++++++++++++++++++++++++++++++++++++++++++++++++');
+							LOG.i(' ');
+							LOG.i(' ');
 							next();
 						});
 					});
@@ -231,7 +232,7 @@ browser.waitFor(function check() {
 			});
 		}, null, 
 		function(){ // finish
-			console.log('COMMAND: DONE');
+			LOG.json({cmd:'DONE'});
 			browser.click('body div.main div div.panel div.header div.info h3 a');
 			browser.waitFor(function check() {
 				return this.evaluate(function () {
@@ -239,7 +240,7 @@ browser.waitFor(function check() {
 				});
 			}, function(){
 				browser.click('#mmpop_system_menu ul li.last_child a');
-				console.log('COMMAND: DONE');
+				LOG.json({cmd:'DONE'});
 				browser.exit();
 			});
 		}, null);
@@ -248,7 +249,7 @@ browser.waitFor(function check() {
 });
 
 browser.then(function () {
-	console.log('COMMAND: DONE');
+	LOG.json({cmd:'DONE'});
 	browser.exit();
 });
 

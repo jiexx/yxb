@@ -3,11 +3,12 @@
 <head>
 <title>微信营销宝</title>
 <link rel="SHORTCUT ICON" href="images/star.ico">
-<script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.slim.js"></script>
-<script type="text/javascript" src="bg.js"></script>
-<script type="text/javascript" src="keeper.js"></script>
+<link href="./bootstrap.min.css" rel="stylesheet">
+<script type="text/javascript" src="./jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="./popper.min.js"></script>
+<script type="text/javascript" src="./bootstrap.min.js"></script>
+<script type="text/javascript" src="./socket.io.js"></script>
+<script type="text/javascript" src="./keeper.js"></script>
 <style>
 * {
 	margin:0;
@@ -15,18 +16,27 @@
 }
 body {
 	font-size:16px;
-	font:400 16px/1.62 Georgia,"Xin Gothic","Hiragino Sans GB","Droid Sans Fallback","Microsoft YaHei",sans-serif;font-family: 'PT serif',微軟正黑體,微软雅黑,华文细黑,Microsoft Yahei,Hiragino Sans GB,sans-serif;
 	color:#D0CCCC;
 	overflow:hidden;
-	text-shadow: 0px 0px 1px rgba(24, 22, 22, 0.35);
 	background-color: #000;
 }
 </style>
 </head>
 <body>
-<div class="container">
-	<div id="keeper" data-uid="<%= uid %>" data-ad="<%= ad %>"><%= thx %></div>
-	<img id="qr" src="./qr/<%= uid %>">
+ 
+<canvas height="100%" width="100%" style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 1;"  id="canvas"></canvas>
+<script type="text/javascript" src="./bg.js"></script>
+<div class="container mt-5" >
+	<h3 class="text-danger text-center mb-0">微信营销宝</h3>
+	<div class="row justify-content-center align-items-center">
+		<div class="card col-6 bg-transparent mt-5">
+			<div class="form form-group mt-3" >
+				<div id="ad" class="form-inline mb-3"><%= ad %></div>
+				<div id="qr" class="text-danger d-none" data-uid="<%= uid %>">请扫描二维码：<img class="bg-white"></div>
+				<div id="thx" class="form-inline  mb-3"><%= thx %></div>
+			</div>
+		</div>
+	</div>	
 </div>
 </body>
 </html>

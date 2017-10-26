@@ -2,14 +2,22 @@ var fs = require("fs");
 var ejs = require("ejs");
 var qr = require("qr-image");
 var url = require("url");
+var path = require("path");
 
 var appRouter = function(app) {
-	app.get(/^\/keeper\/[0-9a-z]+$/, function(req, res){
+	app.get(/^\/[0-9]+$/, function(req, res){
 	  //console.log('Time: ', Date.now());
-		var path = url.parse(req.url).pathname;
-		console.log(path);
-		res.sendFile( __dirname + path );
-		//res.send(ejs.render(fs.readFileSync(__dirname + path,'utf-8'), {}));
+		var urlpath = url.parse(req.url).pathname;
+		//var f = path.join(__dirname, urlpath);
+		console.log('-------->'+__dirname + urlpath.substr(urlpath.lastIndexOf('/'))+'   '+urlpath);
+		//res.writeHead(200, {'Content-Type':'text/html'});
+		//var reader = fs.createReadStream(f);
+		//reader.pipe(res);
+		
+		res.set({'Content-Type':'text/html'});
+		res.sendFile( '/keeper/'+urlpath, {root: __dirname} );
+		//res.send(ejs.render(fs.readFileSync(__dirname + urlpath,'utf-8'), {}));
+		//res.redirect(urlpath.substr(urlpath.lastIndexOf('/')));
 	})
     app.get("/keeper", function(req, res){
 		res.render('./sign.html', {uid: 123456});
@@ -26,11 +34,12 @@ var appRouter = function(app) {
 			var keeper = ejs.render(tmpl, {uid: req.body.uid, ad: req.body.ad, thx: req.body.thx });
 			var qr_svg = qr.image('http://www.wxyxb.com/keeper/'+req.body.uid, {type:'svg'});
 			qr_svg.pipe(fs.createWriteStream('./qrcode/'+req.body.uid+'.svg'));
-			fs.appendFile('./keeper/'+req.body.uid, keeper, {'flags':'w'}, function (err) {
+			fs.writeFile('./keeper/'+req.body.uid, keeper, {'flags':'w'}, function (err) {
 				if(!err) {
-					fs.appendFile('./keeper/ad/'+req.body.uid, req.body.ad+'\n', function (err) {
+					fs.writeFile('./keeper/ad/'+req.body.uid, JSON.stringify(req.body), {'flags':'w'}, function (err) {
 						if(!err) {
-							res.redirect(req.body.uid);
+							console.log('=======>'+req.body.uid);
+							res.json({err:200, url:'http://127.0.0.1:3000/'+req.body.uid, qr:'http://127.0.0.1:3000/qr/'+req.body.uid+'.svg'});
 						}else {
 							res.send('{err:401}');
 						}

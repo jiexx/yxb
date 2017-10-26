@@ -20,10 +20,8 @@ https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css -->
 }
 body {
 	font-size:16px;
-	
 	color:#D0CCCC;
 	overflow:hidden;
-	text-shadow: 0px 0px 1px rgba(24, 22, 22, 0.35);
 	background-color: #000;
 }
 </style>
@@ -39,9 +37,9 @@ body {
 			<div class="form form-group  mt-3">
 				<textarea id="ad" rows="5" class="form-inline form-control mb-3" placeholder="微信好友推广广告词"></textarea>
 				<input id="thx" type="text" class="form-inline form-control mb-3" placeholder="扫码致谢词">
-				<div onclick="build()" class=" form-inline form-control btn btn-danger">创建</div>
-				<br>
-				<div id="uid" data-uid="<%= uid %>"></div>
+				<div onclick="build()" class=" form-inline form-control btn btn-danger mb-3">创建</div>
+				<div id="uid" data-uid="<%= uid %>" class="text-danger d-none">你的推广地址：<a class="text-white" href="#" target="_blank"></a></div>
+				<div id="qr" class="text-danger d-none">你的推广二维码：<img class="bg-white"></div>
 			</div>
 		</div>
 	</div>	

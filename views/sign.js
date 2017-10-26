@@ -4,12 +4,16 @@ var build = function () {
 		url : "http://127.0.0.1:3000/keeper/sign",
 		data : {
 			ad : $("#ad").val(),
-			thx : $("#ad").val(),
+			thx : $("#thx").val(),
 			uid : $("#uid").data('uid')
 		},
 		dataType : "json",
 		success : function (data) {
-			$("#uid").innerHTML = "你的推广地址：" + "http://www.wxyxb.com/"+data.uid;
+			$("#uid").removeClass("d-none");
+			$("#uid > a").html( data.url );
+			$("#uid > a").attr('href', data.url);
+			$("#qr").removeClass("d-none");
+			$("#qr > img").attr('src', data.qr);
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
 		}
