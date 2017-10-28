@@ -6,6 +6,7 @@ var app = express();
 var server = require('http').Server(app);
 var ws = require('socket.io');
 var io = new ws(3001);
+var crawler = require("./crawler.js");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended:true }));
@@ -25,12 +26,18 @@ var server = app.listen(3000, function(){
 
 io.sockets.on('connection', function(socket) {
 	console.log('NEW');
+	var cs = null;
 	socket.emit('NEW', { hello: 'world' });
     socket.on('OPEN', function (data) {
-		console.log('OPEN');
-        var crawler = require("./crawler.js")(socket);
-        crawler.open();
+		console.log('OPEN '+data.uid);
+        cs = new crawler(socket);
+        cs.open(data);
     });
+	socket.on('disconnect', function (data) {
+		if(cs) {
+			cs.close();
+		}
+	});
 });
 
 if(!fs.existsSync('./qrcode')){

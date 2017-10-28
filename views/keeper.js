@@ -6,7 +6,8 @@ $(document).ready(function(){
 	});
 	socket.on('UPDATE', function (data) {
 		d = new Date();
-		$("#qr").attr("src", data.path+'?'+d.getTime());//'./qr/'+$('#keeper').data('uid')+'.jpg?'+d.getTime());
+		$("#qr").removeClass("d-none");
+		$("#qr > img").attr("src", data.path+'?'+d.getTime());//'./qr/'+$('#keeper').data('uid')+'.jpg?'+d.getTime());
 	}); 
 	socket.on('DOING', function (data) {
 		

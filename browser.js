@@ -144,7 +144,7 @@ browser.waitFor(function check() {
 }, function () {
 	//console.log(browser.getElementAttribute('div.qrcode img', 'src'));
 	browser.download(browser.getElementAttribute('div.qrcode img', 'src'), 'qrcode/' + browser.cli.args[0] + '.jpg');
-	LOG.json({cmd:'UPDATE', path:'qrcode/' + browser.cli.args[0] + '.jpg'});
+	LOG.json({cmd:'UPDATE', path:'qr/' + browser.cli.args[0] + '.jpg'});
 	
 	browser.waitFor(function check() {
 		return this.evaluate(function () {

@@ -32,7 +32,7 @@ var Wrapper = /** @class */ (function () {
     Wrapper.unwrap = function (input) {
         return input.split(Wrapper.DELIMITER);
     };
-    Wrapper.DELIMITER = ':  ';
+    Wrapper.DELIMITER = '$:  ';
     return Wrapper;
 }());
 var iTag = /** @class */ (function (_super) {
@@ -74,9 +74,9 @@ var Logger = /** @class */ (function () {
     };
     Logger.prototype.parse = function (input) {
         var i = Wrapper.unwrap(input);
-        return Logger.id_tags[i[0]].decode(i[1]);
+        return Logger.id_tags[i[0]].decode(input);
     };
-	Logger.prototype.isJson(input) {
+	Logger.prototype.isJson = function (input) {
         return Wrapper.getId(input) == Logger.name_id['json'];
     }
     Logger.prototype.i = function (input) {

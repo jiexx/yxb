@@ -27,12 +27,11 @@ body {
 <canvas height="100%" width="100%" style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 1;"  id="canvas"></canvas>
 <script type="text/javascript" src="./bg.js"></script>
 <div class="container mt-5" >
-	<h3 class="text-danger text-center mb-0">微信营销宝</h3>
 	<div class="row justify-content-center align-items-center">
 		<div class="card col-6 bg-transparent mt-5">
 			<div class="form form-group mt-3" >
 				<div id="ad" class="form-inline mb-3"><%= ad %></div>
-				<div id="qr" class="text-danger d-none" data-uid="<%= uid %>">请扫描二维码：<img class="bg-white"></div>
+				<div id="qr" class="text-danger d-none" data-uid="<%= uid %>">请扫描二维码：<img class="col-12 bg-white"></div>
 				<div id="thx" class="form-inline  mb-3"><%= thx %></div>
 			</div>
 		</div>
