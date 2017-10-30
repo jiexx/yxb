@@ -37,10 +37,17 @@ Recursion.prototype.waitFor = function (step) {
 		setTimeout(this.waitFor, this.retryTimeout, step);
 	}
 };
-Recursion.prototype.waitloop = function () {
+Recursion.prototype.waitloop = function (browser) {
 	if (this.index < this.maxSteps && this.index < this.steps.length) {
 		var step = this.steps[this.index];
-		this.waitFor(step);
+		var _this = this;
+		var then = (function(t){
+				return function(){
+					t.index++;
+					t.waitloop();
+				}
+			}(this));
+		browser.waitFor(step.check, then);
 	} else {
 		this.onFinish();
 	}

@@ -100,7 +100,7 @@ function stepsLoop(recurNext) {
 			recurNext();
 		}
 	);
-	steps.waitloop();
+	steps.waitloop(browser);
 }
 
 
