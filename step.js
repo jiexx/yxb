@@ -1,4 +1,4 @@
-function Recursion(steps, max, onFinish) {
+function Recursion(steps, max, onFinish, browser) {
 	this.index = 0;
 	this.steps = steps;
 	this.maxSteps = max;
@@ -6,6 +6,7 @@ function Recursion(steps, max, onFinish) {
     this.retryTimeout = 100;
     this.loopTimeout = 60000;
 	this.timer = 0;
+	this.browser = browser;
 }
 Recursion.prototype.untilloop = function () {
 	var _this = this;
@@ -37,17 +38,16 @@ Recursion.prototype.waitFor = function (step) {
 		setTimeout(this.waitFor, this.retryTimeout, step);
 	}
 };
-Recursion.prototype.waitloop = function (browser) {
+Recursion.prototype.waitloop = function () {
 	if (this.index < this.maxSteps && this.index < this.steps.length) {
 		var step = this.steps[this.index];
 		var _this = this;
-		var then = (function(t){
-				return function(){
-					t.index++;
-					t.waitloop();
-				}
-			}(this));
-		browser.waitFor(step.check, then);
+		this.browser.waitFor(step.check, function(){
+					step.then(function(){
+						_this.index++;
+						_this.waitloop();
+					});
+				});
 	} else {
 		this.onFinish();
 	}

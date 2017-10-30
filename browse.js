@@ -98,9 +98,9 @@ function stepsLoop(recurNext) {
 		], 1024, function(){
 			LOG.i('>>>>>>>one sent! ');
 			recurNext();
-		}
+		}, browser
 	);
-	steps.waitloop(browser);
+	steps.waitloop();
 }
 
 
@@ -116,6 +116,7 @@ function thenClickNavContact(next) {
 	LOG.i('if navContact active & not end then click ');
 	browser.sendKeys('pre#editArea', browser.page.event.key.Escape );
 	browser.click('a[ui-sref=contact]');
+	console.log('browser 1:'+browser);
 	stepsLoop(next);
 }
 function onRecurseFinish() {
