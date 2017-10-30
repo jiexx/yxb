@@ -19,7 +19,7 @@ LOG.i('Open');
 var _prev = null, _curr = null;
 function check1() {
 	LOG.i('if web_wechat_tab_friends active ?');
-	return this.evaluate(function () {
+	return browser.evaluate(function () {
 		return document.querySelectorAll('i.web_wechat_tab_friends.web_wechat_tab_friends_hl').length > 0 && document.querySelectorAll('#navContact div').length > 5;
 	});
 }
@@ -44,7 +44,7 @@ function then1(next) {
 }
 function check2() {
 	LOG.i('if _prev =  _curr ?');
-	_curr = this.evaluate(function () {
+	_curr = browser.evaluate(function () {
 		var e = {};
 		if(document.querySelector('#navContact div div div.active div div.info h4.nickname')) {
 			console.log('====active  _curr '+document.querySelector('#navContact div div div.active div div.info h4.nickname').innerHTML);
@@ -66,7 +66,7 @@ function then2(next) {
 }
 function check3() {
 	LOG.i('if web_wechat_tab_chat active ?');
-	return this.evaluate(function () {
+	return browser.evaluate(function () {
 		return document.querySelectorAll('i.web_wechat_tab_chat.web_wechat_tab_chat_hl').length > 0;
 	});
 }
@@ -79,7 +79,7 @@ function then3(next) {
 }
 function check4() {
 	LOG.i('if js_message_plain sent ?');
-	return this.evaluate(function () {
+	return browser.evaluate(function () {
 		return document.querySelectorAll('pre.js_message_plain').length > 0;
 	});
 }
@@ -87,17 +87,18 @@ function then4(next) {
 	LOG.i('if js_message_plain sent then next ');
 	next();
 }
-function onStepsFinish() {
-	LOG.i('>>>>>>>one sent! ');
-}
 
-function stepsLoop() {
+
+function stepsLoop(recurNext) {
 	var steps = new Steps(
 		[{check:check1,then:then1},
 		{check:check2,then:then2},
 		{check:check3,then:then3},
 		{check:check4,then:then4},
-		], 1024, onStepsFinish
+		], 1024, function(){
+			LOG.i('>>>>>>>one sent! ');
+			recurNext();
+		}
 	);
 	steps.waitloop();
 }
@@ -115,8 +116,7 @@ function thenClickNavContact(next) {
 	LOG.i('if navContact active & not end then click ');
 	browser.sendKeys('pre#editArea', browser.page.event.key.Escape );
 	browser.click('a[ui-sref=contact]');
-	stepsLoop();
-	next();
+	stepsLoop(next);
 }
 function onRecurseFinish() {
 	LOG.json({cmd:'DONE'});
@@ -134,7 +134,7 @@ function onRecurseFinish() {
 
 var recurse = new Recurse(
 	{check:checkNavContact, then:thenClickNavContact},
-	1024, onRecurseFinish
+	3, onRecurseFinish
 );
 
 
@@ -158,11 +158,6 @@ browser.waitFor(function check() {
 		
 		recurse.untilloop();
 	});
-});
-
-browser.then(function () {
-	LOG.json({cmd:'DONE'});
-	browser.exit();
 });
 
 browser.run();

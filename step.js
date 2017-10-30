@@ -3,54 +3,46 @@ function Recursion(steps, max, onFinish) {
 	this.steps = steps;
 	this.maxSteps = max;
 	this.onFinish = onFinish;
+    this.retryTimeout = 100;
+    this.loopTimeout = 60000;
+	this.timer = 0;
 }
 Recursion.prototype.untilloop = function () {
 	var _this = this;
-	if (_this.index < _this.maxSteps) {
-		var step = _this.steps;
-		if (step.check()) {
-			step.then(function(){
-				_this.index++;
-				_this.loop();
-			});
-		}
-		else {
-			_this.onFinish();
-		}
+	var step = _this.steps;
+	if (_this.index < _this.maxSteps && !step.check()) {
+		step.then(function(){
+			_this.index++;
+			_this.untilloop();
+		});
 	}
 	else {
 		_this.onFinish();
 	}
 };
-Recursion.prototype.waitFor = function (check, then, onFinish) {
-	var timeout = 0;
-	var retry = setInterval(function () {
-		timeout += this.retryTimeout;
-		if (timeout >= this.stepTimeout) {
-			clearInterval(retry);
-			onFinish();
-		}
-		else {
-			if (!check()) {
-				clearInterval(retry);
-				then();
-			}
-		}
-	}, this.retryTimeout);
-};
-Recursion.prototype.waitloop = function () {
-	var _this = this;
-	if (_this.index < _this.maxSteps && _this.index < _this.steps.length) {
-		var step = _this.steps[_this.index];
-		_this.waitFor(step.check, function () {
-			step.then(function(){
+Recursion.prototype.waitFor = function (step) {
+	console.log('waitFor 2: ');
+	this.timer += this.retryTimeout;
+	if(this.timer >= this.loopTimeout){
+		this.onFinish();
+	}else if ( step.check() ) {
+		var _this = this;
+		console.log('waitFor 1: ');
+		step.then(function(){
 				_this.index++;
 				_this.waitloop();
 			});
-		}, _this.onFinish);
+	}else {
+		console.log('waitFor 3: ');
+		setTimeout(this.waitFor, this.retryTimeout, step);
 	}
-	else {
-		_this.onFinish();
+};
+Recursion.prototype.waitloop = function () {
+	if (this.index < this.maxSteps && this.index < this.steps.length) {
+		var step = this.steps[this.index];
+		this.waitFor(step);
+	} else {
+		this.onFinish();
 	}
 };
 

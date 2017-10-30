@@ -11,7 +11,7 @@ function browsercfg(csper) {
 				userAgent : 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36'
 			}
 		});
-	//csper.page.outputEncoding = "GBK";
+	phantom.page.outputEncoding = "GBK";
 	browser.options.retryTimeout = 100;
 	browser.options.waitTimeout = 200000;
 	browser.options.onResourceRequested = function (C, requestData, request) {
