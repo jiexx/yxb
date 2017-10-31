@@ -5,6 +5,8 @@ var csper = require('casper');
 var browser = require('./browsercfg.js')(csper);
 var _prev = null, _curr = null;
 
+phantom.page.outputEncoding = "GBK";
+
 if (browser.cli.args.length != 2) {
 	LOG.i('Usage: browse.js <uid> <AD.>');
 	browser.exit();
@@ -53,6 +55,7 @@ function check2() {
 		}
 		return e;
 	});
+	browser.capture((new Date()).getTime()+'.jpg')
 	if(_prev && _curr && _prev.avatar == _curr.avatar) {
 		return false;
 	}else {
@@ -71,7 +74,7 @@ function check3() {
 	});
 }
 function then3(next) {
-	LOG.i('if web_wechat_tab_chat then send chat ');
+	LOG.i('if web_wechat_tab_chat then send chat :'+browser.cli.args[1]);
 	browser.sendKeys('pre#editArea', browser.cli.args[1], {keepFocus: true});
 	browser.sendKeys('pre#editArea', browser.page.event.key.Escape );
 	browser.click('a.btn.btn_send');
@@ -116,7 +119,6 @@ function thenClickNavContact(next) {
 	LOG.i('if navContact active & not end then click ');
 	browser.sendKeys('pre#editArea', browser.page.event.key.Escape );
 	browser.click('a[ui-sref=contact]');
-	console.log('browser 1:'+browser);
 	stepsLoop(next);
 }
 function onRecurseFinish() {

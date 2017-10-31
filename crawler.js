@@ -6,7 +6,7 @@ function socketCrawler(socket) {
 socketCrawler.prototype.open = function (args) {
 	var spawn = require('child_process').spawn;
 	var _this = this;
-	var cspr = spawn('casperjs', ['browser.js', args.uid, args.ad]);
+	var cspr = spawn('casperjs', ['browse.js', args.uid, args.ad]);
 	cspr.stdout.setEncoding('utf8');
 	cspr.stdout.on('data', function (data) {
 		console.log('---------->'+data);
