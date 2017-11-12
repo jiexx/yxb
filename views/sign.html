@@ -3,46 +3,102 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>微信营销宝</title>
-<!--script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css -->
 <link href="./bootstrap.min.css" rel="stylesheet">
 <script type="text/javascript" src="./jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="./popper.min.js"></script>
 <script type="text/javascript" src="./bootstrap.min.js"></script>
 <script type="text/javascript" src="./sign.js"></script>
+<script type="text/javascript" src="./config.js"></script>
 
 <style>
 * {
 	margin:0;
 	padding:0;
+	height: 100%;
+	width:100%;
 }
 body {
 	font-size:16px;
-	color:#D0CCCC;
 	overflow:hidden;
 	background-color: #000;
+}
+.bg1 {
+	background-color:#ffff00
+}
+.bg2 {
+	background-color:#ffc829
+}
+.bg3 {
+	background-color:#ff963c
+}
+.bg4 {
+	background-color:#d9f253
+}
+.bg5 {
+	background-color:#4ef3fe
+}
+.big-font {
+	font-size:6rem;
+}
+.p-big {
+	padding:2.0rem;
+	margin-left: -3.5rem;
+	cursor: pointer;
+}
+.black::-webkit-input-placeholder {
+  color: #000000;
+  opacity: 1;
+  vertical-align: top;
+}
+
+.black:-ms-input-placeholder {
+  color: #000000;
+  opacity: 1;
+  vertical-align: top;  
+}
+
+.black::-ms-input-placeholder {
+  color: #000000;
+  opacity: 1;
+  vertical-align: top;  
+}
+.black {
+  color: #000000;
+}
+.red::-webkit-input-placeholder {
+  color: #ff0000;
+  opacity: 1;
+  vertical-align: top;
+}
+
+.red:-ms-input-placeholder {
+  color: #ff0000;
+  opacity: 1;
+  vertical-align: top;  
+}
+
+.red::-ms-input-placeholder {
+  color: #ff0000;
+  opacity: 1;
+  vertical-align: top;  
+}
+.h-20 {
+	height: 20% !important;
 }
 </style>
 </head>
 <body>
  
 <canvas height="100%" width="100%" style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 1;"  id="canvas"></canvas>
-<script type="text/javascript" src="./bg.js"></script>
-<div class="container mt-5" >
-	<h3 class="text-danger text-center mb-0">微信营销宝</h3>
-	<div class="row justify-content-center align-items-center">
-		<div class="card col-6 border-danger bg-transparent mt-5">
-			<div class="form form-group  mt-3">
-				<textarea id="ad" rows="5" class="form-inline form-control mb-3" placeholder="微信好友推广广告词"></textarea>
-				<input id="thx" type="text" class="form-inline form-control mb-3" placeholder="扫码致谢词">
-				<div onclick="build()" class=" form-inline form-control btn btn-danger mb-3">创建</div>
-				<div id="uid" data-uid="<%= uid %>" class="text-danger d-none">你的推广地址：<a class="text-white" href="#" target="_blank"></a></div>
-				<div id="qr" class="text-danger d-none">你的推广二维码：<img class="bg-white"></div>
-			</div>
-		</div>
-	</div>	
+<!--script type="text/javascript" src="./bg.js"></script-->
+<div style="overflow: auto">
+	<div class="h-20 row m-0 bg1"><div class="text-center text-white font-weight-bold col-3 big-font">1</div><div class="col-9 black pt-4" >赤兔马营销机是为帮助商家进线下推广的利器</div></div>
+	<div class="h-20 row m-0 bg2"><div class="text-center text-white font-weight-bold col-3 big-font">2</div><textarea id="ad" class="border-0 col-9 bg2 black  pt-4 pr-4" placeholder="点击此处，填写你所需要在微信推广中呈现的广告词，如：达美向你推荐，即日起至23日，购买经典系列披萨，享85折优惠，地址:上海宝山区汶水路888号。"></textarea></div>
+	<div class="h-20 row m-0 bg3"><div class="text-center text-white font-weight-bold col-3 big-font">3</div><textarea id="thx" type="text" class="border-0 col-9 bg3 black pt-4 pr-4" placeholder="点击此处，填写你所需要在赤兔马营销机扫码页面的致谢词，如：感谢你帮助推广，微信扫码以下二维码，即日起至23日，享8折优惠。"></textarea></div>
+	<div class="h-20 row m-0 bg4"><div class="text-center text-white font-weight-bold col-3 big-font">4</div><textarea id="wel" type="text" class="border-0 col-9 bg4 black pt-4 pr-4" placeholder="点击此处，填写你所需要在赤兔马营销机扫码推广完成页面的致谢词，如：感谢你惠顾，请领取优惠券。"></textarea></div>
+	<div class="h-20 row m-0 bg5"><div class="text-center text-white font-weight-bold col-3 big-font">5</div><div onclick="build()" class="col-9 black p-big"><img src="./next.svg"></div></div>
+	<div class="h-20 row m-0 bg1 d-none" id="uid"  data-uid="<%= uid %>"><div class="text-center text-white font-weight-bold col-3 big-font">6</div><div class="black col-3 pt-4">你的推广地址：</div><a class="pt-4 col-6" href="#" target="_blank"></a></div>
+	<div class="h-20 row m-0 bg2 d-none" id="qr"><div class="text-center text-white font-weight-bold col-3 big-font">7</div><div id="qr" class="black col-3 pt-4">你的推广二维码：</div><img class="col-auto  border-0"></div>
 </div>
 </body>
 </html>

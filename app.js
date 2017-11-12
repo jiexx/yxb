@@ -1,11 +1,12 @@
 var fs = require('fs');
+var CFG = require("./config.json");
 
 var express = require("express");
 var bodyParser = require("body-parser");
 var app = express();
 var server = require('http').Server(app);
 var ws = require('socket.io');
-var io = new ws(3001);
+var io = new ws(CFG.WSPORT);
 var crawler = require("./crawler.js");
 
 app.use(bodyParser.json());
@@ -20,7 +21,8 @@ app.use('/', express.static(__dirname + '/views'));
 app.use('/keeper', express.static(__dirname + '/views'));
 app.use('/qr', express.static(__dirname + '/qrcode'));
 
-var server = app.listen(3000, function(){
+var server = app.listen(CFG.WEBPORT, function(){
+	fs.writeFileSync('./views/config.js', 'window.CFG='+JSON.stringify(CFG), 'utf8');
     console.log("Listening on port %s...", server.address().port);
 });
 
@@ -32,6 +34,12 @@ io.sockets.on('connection', function(socket) {
 		console.log('OPEN '+data.uid);
         cs = new crawler(socket);
         cs.open(data);
+    });
+	socket.on('DONE', function (data) {
+		console.log('DONE ');
+        if(cs) {
+			cs.close();
+		}
     });
 	socket.on('disconnect', function (data) {
 		if(cs) {
