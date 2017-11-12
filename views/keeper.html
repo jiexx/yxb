@@ -28,12 +28,21 @@ body {
 .black {
 	color: #000000;
 }
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+}
 </style>
 </head>
 <body>
  
 <canvas height="100%" width="100%" style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 1;"  id="canvas"></canvas>
 <!--script type="text/javascript" src="./bg.js"></script-->
+<footer >
+	<div class="row mx-auto text-center"><img class="col-2 mx-auto" id="refresh" src="./refresh.svg"></div>
+</footer>
 <div class="container mt-5" >
 	<div class="row"><div id="thx" class="black m-5 mx-auto"><%= thx %></div></div>
 	<div class="row"><div id="qr" class="black mx-auto text-center d-none" data-uid="<%= uid %>" data-ad="<%= ad %>"><img class="col-6"></div></div>

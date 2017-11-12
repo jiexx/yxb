@@ -1,3 +1,4 @@
+
 var build = function () {
 	if(CFG) {
 		if($("#ad").val()=="") {
