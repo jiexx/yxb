@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="master-artboard" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" style="enable-background:new 0 0 649 485;" width="128px" height="128px"><rect id="ee-background" x="0" y="0" width="128" height="128" style="fill: white; fill-opacity: 0; pointer-events: none;"/>
+
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="324.4938" y1="995.3072" x2="324.4938" y2="-222.5641" gradientTransform="matrix(1 0 0 -1 0 474)">
+		<stop offset="0" style="stop-color:#DAE7A2"/>
+		<stop offset="1" style="stop-color:#8CC63F"/>
+	</linearGradient>
+
+
+<g transform="matrix(0.9171608918551186, 0, 0, 0.9171608918551186, 0.000014005552657181397, 0.000014182824997988064)"><rect id="rect-1" x="0" y="0" width="128" height="128" style="fill: white; fill-opacity: 0; pointer-events: none;"/><linearGradient id="gradient-1" gradientUnits="userSpaceOnUse" x1="324.4938" y1="995.3072" x2="324.4938" y2="-222.5641" gradientTransform="matrix(1 0 0 -1 0 474)">
+		<stop offset="0" style="stop-color:#DAE7A2"/>
+		<stop offset="1" style="stop-color:#8CC63F"/>
+	</linearGradient><g transform="matrix(1.883647539432765, 0, 0, 1.883647539432765, -112.05287639628048, -40.173692612754664)"><path d="M 71.4000015258789 309.6000061035156 L 65.69999694824219 314.8999938964844 L 90.15087890625 337.85321044921875 L 90.15087890625 337.6444396972656 L 65.69999694824219 360.3999938964844 L 71.4000015258789 365.70001220703125 L 95.69999694824219 342.8999938964844 L 101.30000305175781 337.6000061035156 L 71.4000015258789 309.6000061035156 Z" class="st3" style="fill: rgb(0, 0, 0); fill-opacity: 0.21;" transform="matrix(-1.047852501411781, 0, 0, -1.047852501411781, 183.0305455171009, 412.4656313960621)"/><path d="M 71.4000015258789 309.6000061035156 L 65.69999694824219 314.8999938964844 L 90.15087890625 337.85321044921875 L 90.15087890625 337.6444396972656 L 65.69999694824219 360.3999938964844 L 71.4000015258789 365.70001220703125 L 95.69999694824219 342.8999938964844 L 101.30000305175781 337.6000061035156 L 71.4000015258789 309.6000061035156 Z" class="st3" style="fill: rgb(255, 255, 255);" transform="matrix(-1.1172653279256275, 0, 0, -1.1172653279256275, 183.48725632609614, 432.6369567954748)"/></g></g></svg>

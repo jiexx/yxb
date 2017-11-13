@@ -5,6 +5,11 @@ $(document).ready(function(){
 		socket.emit('OPEN', { uid: $('#qr').data('uid'), ad: $('#qr').data('ad') });
 		$("#thx").removeClass("d-none");
 		$("#wel").addClass("d-none");
+		$("#qr").addClass("d-none");
+	});
+	$("#back").click(function(){
+		io.disconnect();
+		JSInterface.back();
 	});
 	if(CFG) {
 		socket = io.connect(CFG.WS); 
@@ -31,13 +36,13 @@ $(document).ready(function(){
 				$("#wel").addClass("d-none");
 				socket.emit('OPEN', { uid: $('#qr').data('uid'), ad: $('#qr').data('ad') });
 			}, 5000);
-			if(mJSPrinter) {
+			if(JSInterface) {
 				/*var description = "";  
 				for (var i in mJSPrinter) {  
 					description += i + " = " + mJSPrinter[i] + "\n";  
 				} 
 				$('#wel').html('mJSPrinter:  '+$('#wel').html()+'  '+mJSPrinter+'  '+description +' print '+mJSPrinter.print);*/
-				mJSPrinter.print($('#wel').html(),'welcome');
+				JSInterface.print($('#wel').html(),'welcome');
 			}
 		});
 	}

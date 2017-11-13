@@ -1,4 +1,3 @@
-
 var build = function () {
 	if(CFG) {
 		if($("#ad").val()=="") {
@@ -13,6 +12,10 @@ var build = function () {
 			$("#wel").removeClass("black").addClass("red");
 			return;
 		}
+		$.cookie("ad", $("#ad").val(), { expires : 10 });
+		$.cookie("thx", $("#thx").val(), { expires : 10 });
+		$.cookie("wel", $("#wel").val(), { expires : 10 });
+		
 		$("#thx").removeClass("red").addClass("black");
 		$("#ad").removeClass("red").addClass("black");
 		$.ajax({
@@ -38,3 +41,18 @@ var build = function () {
 		});
 	}
 }
+
+$(document).ready(function(){ 
+	var ad = $.cookie("ad");
+	var thx = $.cookie("thx");
+	var wel = $.cookie("wel");
+	if(ad) {
+		$("#ad").val(ad);
+	}
+	if(thx) {
+		$("#thx").val(thx);
+	}
+	if(wel) {
+		$("#wel").val(wel);
+	}
+});
