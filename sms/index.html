@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Batch editable table</title>
+  
+  
+  <link rel='stylesheet prefetch' href='css/bootstrap.min.css'>
+<link rel='stylesheet prefetch' href='css/ng-table.min.css'>
+<link rel='stylesheet prefetch' href='css/nqjzro.css'>
+
+      <link rel="stylesheet" href="css/style.css">
+
+  
+</head>
+
+<body>
+  <div ng-app="myApp" class="container-fluid">
+  <div class="container">
+       <div ng-show="isExplanationOpen"></div>
+  </div>
+  <div class="row">
+    <div  class="container" ng-controller="dynamicDemoController as demo">
+      <h3>联系方式</h3>
+      <div class="brn-group pull-right">
+        <button class="btn btn-default" ng-if="demo.isEditing" ng-click="demo.cancelChanges()">
+          <span class="glyphicon glyphicon-remove"></span>
+        </button>
+        <button class="btn btn-primary" ng-if="!demo.isEditing" ng-click="demo.isEditing = true">
+          <span class="glyphicon glyphicon-pencil"></span>
+        </button>
+        <button class="btn btn-primary" ng-if="demo.isEditing" ng-disabled="!demo.hasChanges() || demo.tableTracker.$invalid" ng-click="demo.saveChanges()">
+          <span class="glyphicon glyphicon-ok"></span>
+        </button>
+        <button class="btn btn-default" ng-click="demo.add()">
+          <span class="glyphicon glyphicon-plus"></span>
+        </button>
+      </div>
+      <table ng-table-dynamic="demo.tableParams with demo.cols" class="table table-bordered table-condensed table-hover editable-table" ng-form="demo.tableForm" disable-filter="demo.isAdding" demo-tracked-table="demo.tableTracker">
+        <colgroup>
+          <col width="70%" />
+          <col width="12%" />
+          <col width="13%" />
+          <col width="5%" />
+        </colgroup>
+        <tr ng-repeat="row in $data" ng-form="rowForm" demo-tracked-table-row="row">
+          <td ng-repeat="col in $columns" ng-class="rowForm[col.field].$dirty ? 'bg-warning' : ''" ng-form="{{col.field}}" demo-tracked-table-cell>
+            <span ng-if="col.dataType !== 'command' && !demo.isEditing" class="editable-text">{{row[col.field]}}</span>
+            <div ng-if="col.dataType !== 'command' && demo.isEditing" class="controls" ng-class="rowForm[col.field].$invalid && rowForm[col.field].$dirty ? 'has-error' : ''" ng-switch="col.dataType">
+              <input ng-switch-default type="text" name="{{col.field}}" ng-model="row[col.field]" class="editable-input form-control input-sm" required />
+              <input ng-switch-when="number" type="number" name="{{col.field}}" ng-model="row[col.field]" class="editable-input form-control input-sm" required />
+            </div>
+            <button ng-if="col.dataType === 'command'" class="btn btn-danger btn-sm" ng-click="demo.del(row)" ng-disabled="!demo.isEditing"><span class="glyphicon glyphicon-trash"></span></button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+  <script src='./js/lodash.min.js'></script>
+<script src='./js/angular.min.js'></script>
+<script src='js/nqjzro.js'></script>
+<script src='./js/ng-table.min.js'></script>
+
+    <script  src="js/index.js"></script>
+
+</body>
+</html>
