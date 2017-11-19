@@ -149,6 +149,9 @@ var Page = /** @class */ (function () {
         }
     };
     Page.prototype.gather = function () {
+		for (var j in jpf) {
+			this.put(jpf[j].x, jpf[j].y, jpf[j].w, jpf[j].h);
+		}
         for (var i = 0; i < this.tabs.length; i++) {
             this._gather(this.tabs[i]);
         }
