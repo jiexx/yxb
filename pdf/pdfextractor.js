@@ -1,4 +1,4 @@
-var GAP = 0.03;
+var GAP = 0.033;
 var Segment = /** @class */ (function () {
     function Segment(x, y, w, h) {
         this.x = 0;
@@ -31,9 +31,9 @@ var Segment = /** @class */ (function () {
 }());
 ;
 var Table = /** @class */ (function () {
-    function Table() {
-        this.ss = [];
-        this.outline = null;
+    function Table(s, outline) {
+        this.ss = [s];
+        this.outline = outline;
     }
     Table.prototype.add = function (s) {
         this.outline = !this.outline ? s : this.outline.merge(s);
@@ -43,7 +43,7 @@ var Table = /** @class */ (function () {
         return this.outline.intersect(tab.outline);
     };
     Table.prototype.merge = function (tab) {
-        var t = new Table();
+        var t = new Table(tab.ss, tab.outline);
         t.ss = this.ss || tab.ss;
         t.outline = this.outline.merge(tab.outline);
         return t;
@@ -57,7 +57,10 @@ var Line = /** @class */ (function () {
     Line.prototype.add = function (a) {
         var i = 0;
         for (i = 0; i < this.point.length; i++) {
-            if (this.point[i] > a) {
+            if (Math.abs(this.point[i] - a) < GAP) {
+                return;
+            }
+            else if (this.point[i] > a) {
                 this.point.splice(i, 0, a);
                 return;
             }
@@ -66,7 +69,7 @@ var Line = /** @class */ (function () {
     };
     Line.prototype.contain = function (a) {
         var i = 0;
-        if (a < this.point[0]) {
+        if (a < this.point[0] || a > this.point[this.point.length - 1]) {
             return -1;
         }
         else {
@@ -84,15 +87,16 @@ var Grid = /** @class */ (function () {
     function Grid(t) {
         this.Lx = new Line();
         this.Ly = new Line();
+        this.out = null;
         for (var i in t.ss) {
             this.add(t.ss[i]);
         }
-        console.log('Grid create..');
-        this.out = new Array(this.Lx.point.length);
-        for (var n = 0; n < this.out.length; n++) {
-            this.out[i] = new Array(this.Ly.point.length);
+        if (this.Lx.point.length > 0 && this.Ly.point.length > 0) {
+            this.out = new Array(this.Ly.point.length);
+            for (var n = 0; n < this.out.length; n++) {
+                this.out[n] = new Array(this.Lx.point.length);
+            }
         }
-        console.log('Grid :'+JSON.stringify(this.out));
     }
     Grid.prototype.add = function (s) {
         if (s.w > s.h && Math.abs(s.h - GAP) < GAP) {
@@ -105,20 +109,44 @@ var Grid = /** @class */ (function () {
         }
     };
     Grid.prototype.put = function (x, y, str) {
-        var i = this.Lx.contain(x);
-        var j = this.Ly.contain(y);
-        console.log('put Grid :'+JSON.stringify(this.out));
-        if (i > -1 && j > -1) {
-            this.out[i][j] = str;
+        if (this.out) {
+            var j = this.Lx.contain(x);
+            var i = this.Ly.contain(y);
+            if (i > -1 && j > -1) {
+                if (!this.out[i][j]) {
+                    this.out[i][j] = str;
+                }
+                else if (this.out[i][j] != str) {
+                    this.out[i][j] = this.out[i][j] + str;
+                }
+            }
         }
     };
     return Grid;
 }());
 var Page = /** @class */ (function () {
-    function Page() {
+    function Page(Fills, Texts) {
         this.tabs = [];
         this.tabsMerged = [];
         this.grids = [];
+        for (var i = 0; i < Fills.length; i++) {
+            this.put(Fills[i].x, Fills[i].y, Fills[i].w, Fills[i].h);
+        }
+        for (var i = 0; i < this.tabs.length; i++) {
+            this._gather(this.tabs[i]);
+        }
+        for (var i = 0; i < this.tabsMerged.length; i++) {
+            var g = new Grid(this.tabsMerged[i]);
+            this.grids.push(g);
+        }
+        for (var k in Texts) {
+            var text = '';
+            var item = Texts[k];
+            for (var r in item.R) {
+                text += item.R[r].T;
+            }
+            this.pull(item.x, item.y, item.w, text);
+        }
     }
     Page.prototype.put = function (x, y, w, h) {
         var s = new Segment(x, y, w, h);
@@ -131,8 +159,8 @@ var Page = /** @class */ (function () {
             }
         }
         if (!inside) {
-            var tab = new Table();
-            tab.add(s);
+            var tab = new Table(s, s);
+            //tab.add(s);
             this.tabs.push(tab);
         }
     };
@@ -148,21 +176,9 @@ var Page = /** @class */ (function () {
             this.tabsMerged.push(t);
         }
     };
-    Page.prototype.gather = function () {
-		for (var j in jpf) {
-			this.put(jpf[j].x, jpf[j].y, jpf[j].w, jpf[j].h);
-		}
-        for (var i = 0; i < this.tabs.length; i++) {
-            this._gather(this.tabs[i]);
-        }
-        for (var i = 0; i < this.tabsMerged.length; i++) {
-            var g = new Grid(this.tabsMerged[i]);
-            this.grids.push(g);
-        }
-    };
-    Page.prototype.pull = function (x, y, str) {
+    Page.prototype.pull = function (x, y, w, str) {
         for (var i in this.grids) {
-            this.grids[i].put(x, y, str);
+            this.grids[i].put(x + (w / 2.0), y + GAP, str);
         }
     };
     return Page;
@@ -171,21 +187,7 @@ var PdfExtractor = /** @class */ (function () {
     function PdfExtractor(json_pages) {
         this.pages = [];
         for (var i in json_pages) {
-            var jpf = json_pages[i].Fills;
-            var jpt = json_pages[i].Texts;
-            var page = new Page();
-            for (var j in jpf) {
-                page.put(jpf[j].x, jpf[j].y, jpf[j].w, jpf[j].h);
-            }
-            page.gather();
-            for (var k in jpt) {
-                var text = '';
-                var item = jpt[k];
-                for (var r in item.R) {
-                    text += item.R[r].T;
-                }
-                page.pull(item.x, item.y, text);
-            }
+            var page = new Page(json_pages[i].Fills, json_pages[i].Texts);
             this.pages.push(page);
         }
     }
@@ -193,12 +195,28 @@ var PdfExtractor = /** @class */ (function () {
         var out = [];
         for (var i in this.pages) {
             var page = this.pages[i];
-            out[i] = page.grids;
+            var grids = this.pages[i].grids;
+            for (var j in grids) {
+                if (grids[j].out) {
+                    out.push(grids[j].out);
+                }
+            }
         }
         return out;
     };
-    PdfExtractor.prototype.print = function () {
-        console.log(JSON.stringify(this.extract()));
+    PdfExtractor.prototype.output = function () {
+        var out = [];
+        for (var i in this.pages) {
+            var page = this.pages[i];
+            var grids = this.pages[i].grids;
+            out[i] = [];
+            for (var j in grids) {
+                if (grids[j].out) {
+                    out[i].push({ outlinex: grids[j].Lx.point, outliney: grids[j].Ly.point, out: grids[j].out });
+                }
+            }
+        }
+        return out;
     };
     return PdfExtractor;
 }());
